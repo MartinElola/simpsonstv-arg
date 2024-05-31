@@ -1,21 +1,28 @@
 import RPi.GPIO as GPIO
 import time
 import os
+from subprocess import Popen, PIPE, STDOUT
 
 os.system('raspi-gpio set 19 ip')
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(26, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(18, GPIO.OUT)
-
+GPIO.setwarnings(False)
 
 def turnOnScreen():
     os.system('raspi-gpio set 19 op a5')
     GPIO.output(18, GPIO.HIGH)
+    stop_and_change_video()
 
 
 def turnOffScreen():
     os.system('raspi-gpio set 19 ip')
     GPIO.output(18, GPIO.LOW)
+
+
+def stop_and_change_video():
+    # Comunicar con player.py para detener el video actual
+    os.system('pkill -f mplayer')    
 
 
 turnOffScreen()
